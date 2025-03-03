@@ -1,6 +1,6 @@
 # AnyAPI
 
-An API for general things
+My API for general things
 
 ### Download everything needed
 
