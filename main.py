@@ -1,12 +1,25 @@
 from fastapi import FastAPI, File, UploadFile, HTTPException
-import mimetypes, os, shutil
+from pathlib import Path
+import mimetypes, os, shutil, sqlite3
 
 app = FastAPI()
 
 script_dir = os.path.dirname(os.path.abspath(__file__))
 upload_folder = os.path.join(script_dir, "uploads")
+db_path = os.path.join(script_dir, 'database.db')
 
 os.makedirs(upload_folder, exist_ok=True)
+
+if not os.path.exists(db_path):
+   Path(db_path).touch()
+
+with sqlite3.connect(db_path) as conn:
+        conn.execute('''
+            CREATE TABLE IF NOT EXISTS TABLE (
+                id INTEGER PRIMARY KEY AUTOINCREMENT,
+                name TEXT
+            );
+        ''')
 
 @app.get("/")
 def root():
