@@ -1,6 +1,7 @@
 from fastapi import FastAPI, File, UploadFile, HTTPException
+from pathlib import Path
 from fastapi.responses import FileResponse
-import mimetypes, os, shutil, json
+import mimetypes, os, shutil, sqlite3, json
 
 with open("tags_metadata.json", "r") as file:
     tags_metadata = json.load(file)
@@ -9,8 +10,20 @@ app = FastAPI(openapi_tags=tags_metadata)
 
 script_dir = os.path.dirname(os.path.abspath(__file__))
 upload_folder = os.path.join(script_dir, "uploads")
+db_path = os.path.join(script_dir, 'database.db')
 
 os.makedirs(upload_folder, exist_ok=True)
+
+if not os.path.exists(db_path):
+   Path(db_path).touch()
+
+with sqlite3.connect(db_path) as conn:
+    conn.execute('''
+        CREATE TABLE IF NOT EXISTS TABLE (
+            id INTEGER PRIMARY KEY AUTOINCREMENT,
+            name TEXT
+        );
+    ''')
 
 @app.get("/")
 def root():
