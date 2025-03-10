@@ -19,7 +19,7 @@ if not os.path.exists(db_path):
 
 with sqlite3.connect(db_path) as conn:
     conn.execute('''
-        CREATE TABLE IF NOT EXISTS TABLE (
+        CREATE TABLE IF NOT EXISTS my_table (
             id INTEGER PRIMARY KEY AUTOINCREMENT,
             name TEXT
         );
